@@ -1,11 +1,16 @@
-const HtmlWebPackPlugin = require("html-webpack-plugin");
+// const HtmlWebPackPlugin = require("html-webpack-plugin");
 
-const htmlWebpackPlugin = new HtmlWebPackPlugin({
-  template: "./src/index.html",
-  filename: "./index.html"
-});
+// const htmlWebpackPlugin = new HtmlWebPackPlugin({
+//   template: "./src/index.html",
+//   filename: "./index.html"
+// });
 
 module.exports = {
+  entry: './src/index.js',
+  output: {
+    filename: 'index.js',
+    path: __dirname + '/assets/js'
+  },
   module: {
     rules: [
       {
@@ -34,6 +39,6 @@ module.exports = {
         ]
       }
     ]
-  },
-  plugins: [htmlWebpackPlugin]
+  }
+  // plugins: [htmlWebpackPlugin]
 };

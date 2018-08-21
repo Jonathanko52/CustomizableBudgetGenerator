@@ -6,7 +6,7 @@
   "scripts": {
     "start": "webpack-dev-server --open --mode development",
     "build": "webpack",
-    "test": "nodemon src/server.js"
+    "test": "nodemon src/server/server.js"
   },
   "keywords": [
     "react"
@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "path": "^0.12.7",
+    "pg": "^7.4.3",
     "react-redux": "^5.0.7",
     "redux": "^4.0.0"
   }

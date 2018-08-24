@@ -8,35 +8,41 @@ const dbUrl = 'postgres://ulurpczi:xfmH-K3m2a79Oeh21kgUixggztErS5XE@nutty-custar
 
 module.exports={
 
+    //checks if user/password combination exists, returns the associated ID number in the req.body
     checkUser: async(req,res,next)=>{
-        const data = function promiseReturningThingy(){
+        const data = await function promiseReturningThingy(){
             return new Promise((resolve,reject)=>{
                 var client = new pg.Client(dbUrl);
                 client.connect((err)=>{
                         if(err){
-                            return console.error('postgres connection failed', err)
+                            return console.error('postgres connection failed', err);
                         }
                     client.query(`SELECT ID FROM userdata WHERE username = '${req.body.user}' AND password = '${req.body.password}';`,(err,result)=>{
                         if(err){
                             return console.error('error running query', err);
                         } else {
                             if(result.rows[0] === undefined){
-                                console.error("login failed")
+                                console.error("login failed");
                                 //Assuming promise failure, rejects with following error message
-                                reject(err)
+                                reject(err);
+                                next();
                             } else {
-                                console.log("query success", result.rows[0])
+                                console.log("query success", result.rows[0].id);
                                 //Assuming promise success, resolves promise as result of query, under "data" const
-                                resolve(result.rows[0])
-                                req.body = data;
-                                next()
+                                resolve(result.rows[0].id);
                             }
                         }
                     });
                 })
             })//end Promise
         }()
+        req.body = data;
+        next();
+    },
+    //attach cookie with associated id to user for this session
+    attachCookie: (req,res,next) => {
+        res.cookie('ID', req.body.toString());
+        console.log('cookieattached');
+        next();
     }
-
-
 }

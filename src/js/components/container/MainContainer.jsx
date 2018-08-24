@@ -5,7 +5,6 @@ class MainContainer extends Component {
   constructor() {
     super();
     this.state = {
-      Foam:['L200 1/2 BLACK/WHITE', 0 ,16.50]
     }
 
   }

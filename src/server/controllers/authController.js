@@ -44,5 +44,10 @@ module.exports={
         res.cookie('ID', req.body.toString());
         console.log('cookieattached');
         next();
+    },
+    //converts cookie into user ID for pulling associated user information from mongoose server
+    checkCookie: (req,res,next) =>{
+        req.body = req.cookies.ID
+        next()
     }
 }

@@ -16,13 +16,11 @@ app.get('/', (req,res)=>{
     res.sendFile(path.join(__dirname + './../../views/login.html'));
 });
 
-
-
-app.post('/signin', authController.checkUser, authController.attachCookie,
-    (req,res)=>{
-        res.sendFile(path.join(__dirname + './../../views/index.html'));
-    }
+app.post('/signin', authController.checkUser, authController.attachCookie, authController.checkCookie,
+    (req,res,next)=>{res.sendFile(path.join(__dirname + './../../views/index.html'))}
 )
+
+app.get('/retrieveTable', authController.checkCookie, taskController.retrieveTable)
 
 app.listen(3333, ()=>{
     console.log('Listening on 3333');

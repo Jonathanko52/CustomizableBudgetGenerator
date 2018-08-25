@@ -22,6 +22,8 @@ app.post('/signin', authController.checkUser, authController.attachCookie, authC
 
 app.get('/retrieveTable', authController.checkCookie, taskController.retrieveTable)
 
+app.post('/updateTable', authController.checkCookieAndBody, taskController.updateTable)
+
 app.listen(3333, ()=>{
     console.log('Listening on 3333');
 });

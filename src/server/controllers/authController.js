@@ -49,5 +49,10 @@ module.exports={
     checkCookie: (req,res,next) =>{
         req.body = req.cookies.ID
         next()
+    },
+    //converts cookie into key and recieved data into value of an object
+    checkCookieAndBody: (req,res,next) =>{
+        req.body = {[req.cookies.ID]:req.body}
+        next()
     }
 }

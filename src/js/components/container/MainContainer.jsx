@@ -11,6 +11,7 @@ class MainContainer extends Component {
       costPerUnitArr: null
     }
     this.retrieveTable = this.retrieveTable.bind(this)
+    this.updateTable = this.updateTable.bind(this)
 
   }
 
@@ -30,12 +31,24 @@ class MainContainer extends Component {
     })
     .catch((err)=>{console.log('fetch failed', err)})
     
+  }
 
+  updateTable(){
+    console.log("STATE TO BE UPDATE", this.state)
+    fetch('http://localhost:3333/updateTable',{
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+      body: JSON.stringify(this.state)
+   })
   }
 
   render() {
     return (
       <div>
+        {/* retrieves user table from mlab */}
         <button onClick={this.retrieveTable}>
           Retrieve Button
         </button>
@@ -48,8 +61,9 @@ class MainContainer extends Component {
           Delete Button
         </button>
         <br></br>
-        <button>
-          Update Button
+        {/* uploads current table(state) to mlab */}
+        <button onClick={this.updateTable}>
+          Update Button 
         </button>
         <p>Table Go here</p>
         <Table itemNameArr={this.state.itemNameArr} quantityArr={this.state.quantityArr} costPerUnitArr={this.state.costPerUnitArr}/>

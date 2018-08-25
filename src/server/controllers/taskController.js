@@ -2,13 +2,14 @@ const tableModel = require('../models/TableModel.js')
 const path = require('path');
 
 module.exports = {
+    //Creates a table to be places into MongoDB
   createTable:(req,res,next)=>{
       tableModel.create({
-        itemName:['L200 1/2 BLACK/WHITE'],
-        quantity:[0],
-        costPerUnit:[16.50],
+        itemName:[],
+        quantity:[],
+        costPerUnit:[],
         userId:0,
-    },(err,createdIt)=>{
+    },(err)=>{
         if(err){
             res.status(500).sendFile(path.join(__dirname + './../../views/index.html'))
         } else {
@@ -18,6 +19,7 @@ module.exports = {
     next()
   },
 
+    //retrieves Table corresponding to userID from mongDB
   retrieveTable:(req,res,next)=>{
     tableModel.find({userId:req.body},(err, data)=>{
         if(err){
@@ -30,9 +32,23 @@ module.exports = {
     })
   },
 
-  updateItem: (req,res)=>{
+    //saves table form react app state to mongodb
+    updateTable: (req,res,next)=>{
+        console.log("UPDATE REQ",req.body)
+        tableModel.findOneAndUpdate({userID:req.body},{
+            itemName:req.body.itemNameArr,
+            quantity:req.body.quantityArr,
+            costperunit:req.body.costPerUnitArr,
+        },
+        (err)=>{
+            if(err){
+                console.log('UPDATE FAILED', err)
+            } 
+            console.log("SUCCEEDED. WHAT IS THIS", data)   
 
-  },
+
+        })
+    },
 
   deleteTable:(req,res)=>{
 

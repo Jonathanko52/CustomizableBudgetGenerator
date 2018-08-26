@@ -7,7 +7,6 @@ class Row extends Component {
   }
 
   render() {
-    console.log(this.props, "RO PROPS")
    return(
     <tr>
       <th> </th>

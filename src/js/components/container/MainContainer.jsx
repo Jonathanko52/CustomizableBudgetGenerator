@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Table from "./../presentational/Table.jsx";
+import AddForm from "../presentational/AddForm.jsx";
 
 class MainContainer extends Component {
   constructor() {
@@ -10,8 +11,18 @@ class MainContainer extends Component {
       quantityArr: null,
       costPerUnitArr: null
     }
-    this.retrieveTable = this.retrieveTable.bind(this)
-    this.updateTable = this.updateTable.bind(this)
+
+    //retrieves table from mLab
+    this.retrieveTable = this.retrieveTable.bind(this);
+
+    //updates table on Mlab with current table (state)
+    this.updateTable = this.updateTable.bind(this);
+
+    //adds an item to current table(state)
+    this.addItem = this.addItem.bind(this);
+
+    //removes given item from current table(state)
+    this.removeItem = this.removeItem.bind(this);
 
   }
 
@@ -45,6 +56,32 @@ class MainContainer extends Component {
    })
   }
 
+  addItem(passedState){
+    event.preventDefault();
+    this.setState((prevState)=>{
+      console.log("ARGUME/ntS", passedState)
+
+      let newItemArr = prevState.itemNameArr.slice();
+      let newQuantityArr = prevState.quantityArr.slice();
+      let newCostPerUnitArr = prevState.costPerUnitArr.slice();
+      newItemArr.push(passedState.item)
+      newQuantityArr.push(0)
+      newCostPerUnitArr.push(passedState.price)
+
+      return{
+        itemNameArr:newItemArr,
+        quantityArr:newQuantityArr,
+        costPerUnitArr:newCostPerUnitArr
+      }
+    })
+
+  }
+
+  removeItem(){
+
+
+  }
+
   render() {
     return (
       <div>
@@ -67,8 +104,8 @@ class MainContainer extends Component {
         </button>
         <p>Table Go here</p>
         <Table itemNameArr={this.state.itemNameArr} quantityArr={this.state.quantityArr} costPerUnitArr={this.state.costPerUnitArr}/>
-      </div>
-     
+        <AddForm addItem={this.addItem}/>
+      </div> 
     );
   }
 }

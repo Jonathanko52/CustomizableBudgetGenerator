@@ -26,7 +26,6 @@ module.exports = {
           res.end()
         } else {
             let returnData = [data[0].itemName, data[0].quantity, data[0].costperunit]
-            console.log('ITEMNAME',data[0].itemName)
             res.status(200).json(returnData)
         }
     })
@@ -34,17 +33,22 @@ module.exports = {
 
     //saves table form react app state to mongodb
     updateTable: (req,res,next)=>{
-        console.log("UPDATE REQ",req.body)
-        tableModel.findOneAndUpdate({userID:req.body},{
-            itemName:req.body.itemNameArr,
-            quantity:req.body.quantityArr,
-            costperunit:req.body.costPerUnitArr,
+        console.log("UPDATE ID",req.cookies.ID)
+        console.log("UPDATE Itemanem",req.body[0].itemNameArr)
+        console.log("UPDATE quantity",req.body[0].quantityArr)
+        console.log("UPDATE costperunit",req.body[0].costPerUnitArr)
+
+        tableModel.findOneAndUpdate({userId:req.cookies.ID},{
+            itemName:req.body[0].itemNameArr,
+            quantity:req.body[0].quantityArr,
+            costperunit:req.body[0].costPerUnitArr,
         },
-        (err)=>{
+        (err,data)=>{
             if(err){
                 console.log('UPDATE FAILED', err)
             } 
-            console.log("SUCCEEDED. WHAT IS THIS", data)   
+            console.log('update probably suddeeced')
+            res.status(200).json(data)   
 
 
         })

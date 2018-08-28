@@ -53,7 +53,14 @@ class MainContainer extends Component {
         "Content-Type": "application/json; charset=utf-8",
       },
       body: JSON.stringify(this.state)
-   })
+    }).then((res,err)=>{
+      if(err){
+        console.log("UPDATE FAILED", err)
+      }
+      console.log("UPDATE SUCCEEDED", res)
+    }).catch((err)=>{
+      console.log("UPDATE FAILED2", err)
+    })
   }
 
   addItem(passedState){

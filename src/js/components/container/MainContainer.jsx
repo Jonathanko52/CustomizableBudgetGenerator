@@ -14,7 +14,7 @@ class MainContainer extends Component {
 
     //retrieves table from mLab
     this.retrieveTable = this.retrieveTable.bind(this);
-
+    
     //updates table on Mlab with current table (state)
     this.updateTable = this.updateTable.bind(this);
 

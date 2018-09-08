@@ -54,7 +54,14 @@ module.exports = {
         })
     },
 
-  deleteTable:(req,res)=>{
+  deleteTable:(req,res,next)=>{
+      tableModel.deleteOne({userID:req.cookies.ID},(err,data)=>{
+        if(err){
+            console.log('DELETE FAILED', err)
+        }
+        res.status(200).json(data)
+
+      })
 
   },
 

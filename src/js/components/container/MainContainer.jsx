@@ -21,9 +21,14 @@ class MainContainer extends Component {
     //adds an item to current table(state)
     this.addItem = this.addItem.bind(this);
 
-    //removes given item from current table(state)
+    //removes given item(row) from current table(state)
     this.removeItem = this.removeItem.bind(this);
 
+    //increment quantity of item by one
+    this.incrementItem = this.incrementItem.bind(this);
+
+    //decrement quantity of item by one
+    this.decrementItem = this.decrementItem.bind(this);
   }
 
   //goes to retrieve table route on server, grabbing table from mlab and setting the state
@@ -31,14 +36,11 @@ class MainContainer extends Component {
     fetch('http://localhost:3333/retrieveTable')
     .then((res)=>res.json()
     ).then((res)=>{
-      console.log('res jsonned')
       this.setState({
         itemNameArr:res[0],
         quantityArr:res[1],
         costPerUnitArr:res[2]
       })
-      console.log("State modified. Probably")
-      console.log(this.state)
     })
     .catch((err)=>{console.log('fetch failed', err)})
     
@@ -65,15 +67,38 @@ class MainContainer extends Component {
 
   addItem(passedState){
     event.preventDefault();
-    this.setState((prevState)=>{
-      console.log("ARGUME/ntS", passedState)
+    if(isNaN(passedState.price)){
+      alert('INVALID PRICE. MUST BE NUMBER')
+    } else {
+      this.setState((prevState)=>{
 
+        let newItemArr = prevState.itemNameArr.slice();
+        let newQuantityArr = prevState.quantityArr.slice();
+        let newCostPerUnitArr = prevState.costPerUnitArr.slice();
+        newItemArr.push(passedState.item)
+        newQuantityArr.push(0)
+        newCostPerUnitArr.push(passedState.price)
+
+        return{
+          itemNameArr:newItemArr,
+          quantityArr:newQuantityArr,
+          costPerUnitArr:newCostPerUnitArr
+        }
+      })
+    }
+  }
+
+  removeItem(index){
+    event.preventDefault();
+    console.log('Remove Invoked', index)
+    this.setState((prevState)=>{
       let newItemArr = prevState.itemNameArr.slice();
       let newQuantityArr = prevState.quantityArr.slice();
       let newCostPerUnitArr = prevState.costPerUnitArr.slice();
-      newItemArr.push(passedState.item)
-      newQuantityArr.push(0)
-      newCostPerUnitArr.push(passedState.price)
+
+      newItemArr.splice(index,1)
+      newQuantityArr.splice(index,1)
+      newCostPerUnitArr.splice(index,1)
 
       return{
         itemNameArr:newItemArr,
@@ -81,37 +106,68 @@ class MainContainer extends Component {
         costPerUnitArr:newCostPerUnitArr
       }
     })
-
   }
 
-  removeItem(){
+  incrementItem(index){
+    event.preventDefault();
+    this.setState((prevState)=>{
+      let newQuantityArr = prevState.quantityArr.slice();
+      newQuantityArr[index]++
 
+      return{
+        itemNameArr:prevState.itemNameArr,
+        quantityArr:newQuantityArr,
+        costPerUnitArr:prevState.costPerUnitArr
+      }
+    })
+  };
 
+  decrementItem(index){
+    event.preventDefault();
+    this.setState((prevState)=>{
+      let newQuantityArr = prevState.quantityArr.slice();
+      newQuantityArr[index]--
+
+      return{
+        itemNameArr:prevState.itemNameArr,
+        quantityArr:newQuantityArr,
+        costPerUnitArr:prevState.costPerUnitArr
+      }
+    })
   }
 
   render() {
+
+    //Calculating total Price of all items in table
+    let totalCost = 0;
+    if(this.state.quantityArr){
+      this.state.quantityArr.forEach((cur,ind)=>{
+        totalCost += this.state.quantityArr[ind] * this.state.costPerUnitArr[ind]
+      })  
+    }
+
     return (
       <div>
         {/* retrieves user table from mlab */}
         <button onClick={this.retrieveTable}>
-          Retrieve Button
-        </button>
-        <br></br>
-        <button>
-          Create Button
-        </button>
-        <br></br>
-        <button>
-          Delete Button
+          Retrieve Table
         </button>
         <br></br>
         {/* uploads current table(state) to mlab */}
         <button onClick={this.updateTable}>
-          Update Button 
+          Update Database
         </button>
         <p>Table Go here</p>
-        <Table itemNameArr={this.state.itemNameArr} quantityArr={this.state.quantityArr} costPerUnitArr={this.state.costPerUnitArr}/>
+        <Table itemNameArr={this.state.itemNameArr} 
+               quantityArr={this.state.quantityArr} 
+               costPerUnitArr={this.state.costPerUnitArr} 
+               removeItem={this.removeItem}
+               incrementItem={this.incrementItem}
+               decrementItem={this.decrementItem}
+        />
+        <p>Total Cost:{totalCost}</p>
         <AddForm addItem={this.addItem}/>
+        
       </div> 
     );
   }

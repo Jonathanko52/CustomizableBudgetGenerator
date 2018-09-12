@@ -13,7 +13,14 @@ class Table extends Component {
       let rowArr = [];
       
       this.props.itemNameArr.forEach((cur,ind)=>{
-        rowArr.push(<Row item={this.props.itemNameArr[ind]} quantity={this.props.quantityArr[ind]} price={this.props.costPerUnitArr[ind]}/>)
+        rowArr.push(<Row item={this.props.itemNameArr[ind]} 
+                        quantity={this.props.quantityArr[ind]} 
+                        price={this.props.costPerUnitArr[ind]} 
+                        index={ind}
+                        removeItem={this.props.removeItem}
+                        incrementItem={this.props.incrementItem}
+                        decrementItem={this.props.decrementItem}
+        />)
       });
       
       return(
@@ -25,6 +32,8 @@ class Table extends Component {
               <th>Item</th>
               <th>Quantity</th>
               <th>Price</th>
+              <th>Remove Item</th>
+              <th>Add/Subract Item</th>
             </tr>
             {rowArr}
           </thead>
